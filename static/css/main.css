@@ -1,0 +1,136 @@
+.voting {
+    padding: 10px;
+    padding-top: 80px;
+    padding-bottom: 50px;
+    height: 100%;
+}
+
+.votingbg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: -1;
+    font-size: 0;
+}
+
+.votingbg img{
+    width: 100%;
+    height: 100%;
+}
+
+.votinglogo {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.votinglogo img{
+    width: 100%;
+}
+
+.votingtitle{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(26,45,61,0.6);
+    color: #fff;
+    text-align: center;
+    font-size: 23px;
+    padding: 15px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.voting .game {
+    background: rgba(26,45,61,0.8);
+    padding: 0px 10px 10px 10px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    color: #fff;
+}
+
+.voting .game .one .team {
+    font-size: 0;
+}
+
+.voting .game .one .team img {
+    width: 100%;
+}
+
+.voting .game .one .info .date {
+    margin-top: 30%;
+    text-align: center;
+}
+
+.voting .game .one .info img {
+    margin-top: 3px;
+    width: 50%;
+}
+
+.voting .game .two .teamname {
+    text-align: center;
+}
+
+/* .voting .game .three input[type=radio] {
+    display: none;
+}
+
+.voting .game .three .mdui-col-xs-4 {
+    text-align: center;
+}
+
+.voting .game .three .mdui-col-xs-4 label {
+    background: skyblue;
+    display: block;
+    color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 8px 3px 8px 3px;
+} */
+
+.voting .game .three {
+    height: 36px;
+}
+
+.voting .game .three .mdui-col-xs-4 {
+    height: 100%;
+    text-align: center;
+}
+
+.voting .game .three .info {
+    text-align: center;
+    line-height: 36px;
+    font-size: 20px;
+}
+
+@media (max-width: 350px) {
+    .voting .game .one .info img {
+        width: 50%;
+    }
+    body {
+        font-size: 12px;
+    }
+}
+
+.backmain {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 45px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#F9C03F), to(#F8AC20));
+    background: linear-gradient(#F9C03F, #F8AC20);
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #552E0B;
+    z-index: 999;
+}
+
+.backmain:active {
+    background: -webkit-gradient(linear, left top, left bottom, from(rgb(248, 198, 81)), to(rgb(248, 180, 53)));
+    background: linear-gradient(rgb(248, 198, 81), rgb(248, 180, 53));
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>世界杯竞猜-图表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="/js/echarts.common.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="main" style="height:500px"></div>
+    <script>
+        var cid = "<%= cid %>";
+        getUserList(0, "");
+        function getUserList(type, chooseResult) {
+            $.ajax({
+                method: 'post',
+                url: '/getUserList',
+                data: {
+                    cId: cid,
+                    type,
+                    chooseResult,
+                },
+                success: function (data) {
+                    var html = "";
+                    if (type == 0) {
+                        var allData = [];
+                        var numData = [];
+                        var num = 0;
+                        for (var j = 0; j < data.scores.length; j++) {
+                            num = 0;
+                            for (var k = 0; k < data.comps.userList.length; k++) {
+                                if (data.comps.userList[k].chooseResult == data.scores[j]) {
+                                    num++;
+                                }
+                            }
+                            numData.push(num);
+                        }
+                        allData[0] = data.scores;
+                        allData[1] = numData;
+                        myChart.setOption({ //加载数据图表
+                            xAxis: {
+                                data: allData[0],
+                            },
+                            series: [{
+                                data: allData[1],
+                            }],
+                            title: {
+                                text: data.comps.teamOneName + "VS" + data.comps.teamTwoName
+                            }
+                        });
+                    } 
+                }
+            });
+        }
+        var myChart = echarts.init(document.getElementById('main'));
+        var xArr = [];
+        var yArr = [];
+        var seriesLabel = {
+            show: true, //是否展示
+            position: 'top',
+            textStyle: {
+                fontWeight: 'bolder',
+                fontSize: '12',
+                fontFamily: '微软雅黑',
+                color: "#646464"
+            }
+        };
+        var option = {
+            title: {
+                text: ""
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    var relVal = params[0].name;
+                    for (var i = 0, l = params.length; i < l; i++) {
+                        relVal += '<br/>' + `<div style="background:${params[i].color};height:10px;width:10px;border-radius:50%;display:inline-block"></div> ` + ' : ' + params[i].value + "人";
+                    }
+                    return relVal;
+                }
+            },
+            xAxis: {
+                data: xArr
+            },
+            yAxis: {},
+            series: [{
+                type: "bar",
+                data: [],
+                itemStyle: {
+                    color: "#448AFF"
+                },
+                label: seriesLabel
+            }
+            ]
+        }
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>

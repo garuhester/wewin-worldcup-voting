@@ -1,0 +1,120 @@
+<% include ../sharePages/header.html %>
+    <style>
+        .start {
+            width: 70%;
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translate(-50%, 0);
+        }
+
+        .mdui-select {
+            color: #fff;
+            width: 100%;
+            border-bottom: 1px solid #fff;
+            background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2010%2010%22%3E%3Cpath%20d%3D%22m-0.00254%2C2.5l5%2C5l5%2C-5l-10%2C0z%22%20fill%3D%22%23fff%22%20opacity%3D%221%22%2F%3E%3C%2Fsvg%3E%0A);
+        }
+
+        .start .inputname label {
+            font-size: 25px;
+            color: #fff;
+            display: block;
+        }
+
+        .start .inputname #voting-name,
+        .start .inputname #voting-department {
+            margin-top: 3px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+            font-size: 20px;
+            padding: 5px 10px 5px 10px;
+            border-radius: 5px;
+        }
+
+        .intobtn {
+            background: -webkit-gradient(linear, left top, left bottom, from(#F9C03F), to(#F8AC20));
+            background: linear-gradient(#F9C03F, #F8AC20);
+            font-size: 18px;
+            font-weight: bold;
+            color: #552E0B;
+            border-radius: 7px;
+            border: none;
+            outline: none;
+            height: 40px;
+        }
+
+        .intobtn:active {
+            background: -webkit-gradient(linear, left top, left bottom, from(rgb(248, 198, 81)), to(rgb(248, 180, 53)));
+            background: linear-gradient(rgb(248, 198, 81), rgb(248, 180, 53));
+        }
+    </style>
+    <div class="votingbg">
+        <img src="/img/bg.jpg" alt="">
+    </div>
+    <div class="votinglogo">
+        <img src="/img/wewinlogo2.png" alt="">
+    </div>
+    <div class="start mdui-container">
+        <div class="mdui-row">
+            <div class="inputname">
+                <label class="mdui-textfield-label">姓名：</label>
+                <input id="voting-name" type="text" maxlength="8" />
+            </div>
+            <div class="mdui-m-t-2">
+                <div class="inputname">
+                    <label class="mdui-textfield-label">部门：</label>
+                    <input id="voting-department" type="text" maxlength="20" />
+                </div>
+                <!-- <select id="voting-department" class="mdui-select select-content" mdui-select>
+                    <option value="1" selected disabled>请选择部门</option>
+                    <option value="2">软件开发部</option>
+                    <option value="3">互联网事业部</option>
+                    <option value="4">医疗事业部</option>
+                    <option value="5">电力事业部</option>
+                </select> -->
+            </div>
+            <button class="intobtn mdui-btn mdui-btn-block mdui-m-t-5" onclick="submit()">进入竞猜</button>
+        </div>
+    </div>
+
+    <script>
+        var localStorageStr = "wewin-worldcup-user5";
+        var userData = localStorage.getItem(localStorageStr);
+        if (userData != null) {
+            var jsonData = JSON.parse(userData);
+            intoVoting(jsonData.name, jsonData.department, 0);
+        }
+        function submit() {
+            var votingName = document.getElementById("voting-name").value.trim();
+            // var select = document.getElementById("voting-department");
+            // var votingDepartment = select.options[select.selectedIndex].text.trim();
+            var votingDepartment = document.getElementById("voting-department").value.trim();
+            if (votingName != "" && votingDepartment != "") {
+                intoVoting(votingName, votingDepartment, 1);
+            } else {
+                mdui.alert("请填写资料", "消息");
+            }
+        }
+
+        function intoVoting(votingName, votingDepartment, type) {
+            $.ajax({
+                method: "post",
+                url: "/intoVoting",
+                data: {
+                    votingName,
+                    votingDepartment,
+                },
+                success: function (data) {
+                    if (data.result == 1) {
+                        if (type == 1) {
+                            localStorage.setItem(localStorageStr, JSON.stringify(data.user));
+                        }
+                        window.location.href = "/worldcup/index";
+                    }
+                }
+            });
+        }
+    </script>
+
+    <% include ../sharePages/footer.html %>

@@ -1,0 +1,224 @@
+<% include ../sharePages/header.html %>
+    <style>
+        .mdui-select {
+            width: 70%;
+            border-bottom: 1px solid #fff;
+            background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%2010%2010%22%3E%3Cpath%20d%3D%22m-0.00254%2C2.5l5%2C5l5%2C-5l-10%2C0z%22%20fill%3D%22%23fff%22%20opacity%3D%221%22%2F%3E%3C%2Fsvg%3E%0A);
+        }
+
+        .surebtn {
+            background: -webkit-gradient(linear, left top, left bottom, from(#F9C03F), to(#F8AC20));
+            background: linear-gradient(#F9C03F, #F8AC20);
+            font-size: 18px;
+            font-weight: bold;
+            color: #552E0B;
+            border-radius: 7px;
+            border: none;
+            outline: none;
+            height: 40px;
+        }
+
+        .surebtn:active {
+            background: -webkit-gradient(linear, left top, left bottom, from(rgb(248, 198, 81)), to(rgb(248, 180, 53)));
+            background: linear-gradient(rgb(248, 198, 81), rgb(248, 180, 53));
+        }
+
+        .scoreinput {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            font-size: 18px;
+            padding: 5px;
+            text-align: center;
+            outline: none;
+            border-radius: 7px;
+        }
+    </style>
+    <button class="backmain" onclick="window.location.href='/worldcup/index'">回到主页</button>
+    <div class="voting">
+        <div class="votingbg">
+            <img src="/img/bg.jpg" alt="">
+        </div>
+        <div class="votingtitle">今明赛事</div>
+        <div class="mdui-container-fluid">
+            <div class="mdui-row">
+                <% 
+                    for(var i=0;i<data.comp.length;i++){ 
+                        var comp = data.comp[i];
+                %>
+                    <div class="game mdui-container mdui-m-b-3">
+                        <div class="mdui-row one">
+                            <div class="mdui-col-xs-4 team">
+                                <img src="<%= comp.teamOneImg %>" alt="">
+                            </div>
+                            <div class="mdui-col-xs-4 info">
+                                <div class="date">
+                                    <%= dateFormat(comp.beginTime) %>
+                                </div>
+                                <img class="mdui-center" src="/img/vs.png" alt="">
+                            </div>
+                            <div class="mdui-col-xs-4 team">
+                                <img src="<%= comp.teamTwoImg %>" alt="">
+                            </div>
+                        </div>
+                        <div class="mdui-row two">
+                            <div class="mdui-col-xs-4 teamname">
+                                <%= comp.teamOneName %>
+                            </div>
+                            <div class="mdui-col-xs-4 info">
+
+                            </div>
+                            <div class="mdui-col-xs-4 teamname">
+                                <%= comp.teamTwoName %>
+                            </div>
+                        </div>
+                        <!-- <div class="mdui-row three mdui-m-t-1">
+                        <div class="mdui-col-xs-4">
+                            <label for="els">
+                                <input id="els" type="radio" name="group1">俄罗斯胜</label>
+                        </div>
+                        <div class="mdui-col-xs-4 info">
+                            <label for="pj">
+                                <input id="pj" type="radio" name="group1">平局</label>
+                        </div>
+                        <div class="mdui-col-xs-4">
+                            <label for="alb">
+                                <input id="alb" type="radio" name="group1">沙特阿拉伯胜</label>
+                        </div>
+                        </div> -->
+                        <div class="mdui-row three mdui-m-t-2">
+                            <div class="mdui-col-xs-4">
+                                <input class="scoreinput" id="teamone<%= i %>" type="number" min="0" max="20" placeholder="0-20" />
+                                <!-- <select id="teamone<%= i %>" class="mdui-select" mdui-select>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select> -->
+                            </div>
+                            <div class="mdui-col-xs-4 info">
+                                比
+                            </div>
+                            <div class="mdui-col-xs-4">
+                                <input class="scoreinput" id="teamtwo<%= i %>" type="number" min="0" max="20" placeholder="0-20" />
+                                <!-- <select id="teamtwo<%= i %>" class="mdui-select" mdui-select>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select> -->
+                            </div>
+                        </div>
+                        <div class="mdui-row mdui-m-t-1">
+                            <div class="mdui-col-xs-12" style="text-align: center">
+                                截止时间：<%= stopDateFormat(comp.beginTime) %>
+                            </div>
+                        </div>
+                        <div class="mdui-row four mdui-m-t-1">
+                            <div class="mdui-col-xs-12">
+                                <button id="<%= comp._id %>{}<%= i %>" class="surebtn mdui-btn mdui-center  mdui-btn-block" onclick="submitScore(this)">确定比分</button>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+    <script>
+        var userId = "<%= userInfo._id %>";
+        //提交竞猜场次
+        function submitScore(obj) {
+            var compId = obj.id.split("{}")[0];
+            var index = obj.id.split("{}")[1];
+            var reg = /.*\..*/;
+            if ($("#teamone" + index).val().trim() > 20 || $("#teamone" + index).val().trim() < 0 || $("#teamtwo" + index).val().trim() > 20 || $("#teamtwo" + index).val().trim() < 0 || reg.test($("#teamone" + index).val().trim()) || reg.test($("#teamtwo" + index).val().trim())) {
+                mdui.alert("请输入0-20的整数", "消息");
+                $("#teamone" + index).val("");
+                $("#teamtwo" + index).val("");
+            }else if($("#teamone" + index).val().trim() == "" || $("#teamtwo" + index).val().trim() == ""){
+                mdui.alert("请输入两队的分数", "消息");
+            }else {
+                var chooseResult = $("#teamone" + index).val().trim() + "比" + $("#teamtwo" + index).val().trim();
+                mdui.confirm('确定竞猜该比分？', '消息', function () {
+                    $.ajax({
+                        method: "post",
+                        url: "/submitScore",
+                        data: {
+                            compId,
+                            userId,
+                            chooseResult,
+                        },
+                        success: function (data) {
+                            if (data.result == 1) {
+                                mdui.alert("竞猜成功!", "竞猜结果");
+                            } else if (data.result == 0) {
+                                mdui.alert("您已经竞猜过了", "竞猜结果");
+                            } else if (data.result == 2) {
+                                mdui.alert("投票已截止", "竞猜结果");
+                            }
+                        }
+                    });
+                }, function () { }, {
+                        confirmText: "确定",
+                        cancelText: "取消"
+                    });
+            }
+
+        }
+
+        $('.scoreinput').bind('input propertychange', function () {
+            var reg = /.*\..*/;
+            if (this.value > 20 || this.value < 0 || reg.test(this.value)) {
+                mdui.alert("请输入0-20的整数", "消息");
+                this.value = "";
+            }
+        });
+
+        $(":radio").click(function () {
+            GetRadioValue(this.name);
+            this.parentNode.style.background = "yellow";
+            this.parentNode.style.color = "black";
+        });
+
+        function GetRadioValue(RadioName) {
+            var obj = document.getElementsByName(RadioName);
+            if (obj != null) {
+                for (var i = 0; i < obj.length; i++) {
+                    obj[i].parentNode.style.background = "";
+                    obj[i].parentNode.style.color = "white";
+                }
+
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].checked) {
+                        return obj[i].parentNode.textContent.trim();
+                    }
+                }
+            }
+        }
+    </script>
+
+    <% include ../sharePages/footer.html %>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/mdui-v0.4.1/css/mdui.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/mdui-v0.4.1/js/mdui.min.js"></script>
+    <script type="text/javascript" src="/js/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="/js/Blob.js"></script>
+    <title>世界杯竞猜后台</title>
+    <style>
+        #content-main {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .mdui-dialog-content {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-indigo">
+    <!-- 头部 -->
+    <header class="mdui-appbar mdui-appbar-fixed" id="content-header">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a href="/worldcup/admin" class="mdui-typo-headline mdui-hidden-xs">世界杯竞猜后台</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <!-- <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '初始化'}" mdui-dialog="{target: '#refresh-dialog'}">
+                <i class="mdui-icon material-icons">refresh</i>
+            </a> -->
+        </div>
+    </header>
+    <!-- 内容 -->
+    <div class="mdui-container-fluid" id="content-main">
+        <div class="mdui-table-fluid">
+            <table class="mdui-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>场次</th>
+                        <th>场次时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tb">
+                    <% 
+                        for(var i=0;i<data.comp.length;i++){ 
+                            var comp = data.comp[i];
+                    %>
+                        <tr>
+                            <td>
+                                <%= i+1 %>
+                            </td>
+                            <td>
+                                <%= comp.teamOneName %> VS <%= comp.teamTwoName %>
+                            </td>
+                            <td>
+                                <%= dateFormat(comp.beginTime) %>
+                            </td>
+                            <td>
+                                <button id="<%= comp._id %>" class="mdui-btn mdui-color-blue-accent mdui-ripple" onclick="openDialog(this)">竞猜列表</button>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="mdui-fab-wrapper" id="fab" mdui-tooltip="{content: '添加'}" mdui-dialog="{target: '#content-dialog'}">
+            <button class="mdui-fab mdui-ripple mdui-color-pink-accent">
+                <i class="mdui-icon material-icons">add</i>
+                <i class="mdui-icon mdui-fab-opened material-icons">mode_edit</i>
+            </button>
+        </div>
+        <div class="mdui-dialog" id="content-dialog">
+            <div class="mdui-dialog-title">
+                请输入场次信息
+            </div>
+            <div class="mdui-dialog-content">
+                <div class="mdui-container-fluid">
+                    <div class="mdui-row">
+                        <div class="mdui-col-xs-6">
+                            <div class="mdui-textfield mdui-textfield-floating-label">
+                                <label class="mdui-textfield-label">队1名称</label>
+                                <input id="teamOneName" class="mdui-textfield-input input-depart" type="text" />
+                            </div>
+                        </div>
+                        <div class="mdui-col-xs-6">
+                            <div class="mdui-textfield mdui-textfield-floating-label">
+                                <label class="mdui-textfield-label">队1图片地址</label>
+                                <input id="teamOneImg" class="mdui-textfield-input input-depart" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdui-row">
+                        <div class="mdui-col-xs-6">
+                            <div class="mdui-textfield mdui-textfield-floating-label">
+                                <label class="mdui-textfield-label">队2名称</label>
+                                <input id="teamTwoName" class="mdui-textfield-input input-depart" type="text" />
+                            </div>
+                        </div>
+                        <div class="mdui-col-xs-6">
+                            <div class="mdui-textfield mdui-textfield-floating-label">
+                                <label class="mdui-textfield-label">队2图片地址</label>
+                                <input id="teamTwoImg" class="mdui-textfield-input input-depart" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdui-row">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <label class="mdui-textfield-label">场次时间</label>
+                            <input id="beginTime" class="mdui-textfield-input input-depart" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" onclick="addComp()">添加</button>
+                <button class="mdui-btn mdui-ripple" mdui-dialog-cancel>取消</button>
+            </div>
+        </div>
+        <div class="mdui-dialog" id="list-dialog" style="overflow:auto;">
+            <div class="mdui-dialog-content">
+                <table id="result-table" class="mdui-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>姓名</th>
+                            <th class="mdui-table-col-numeric">部门</th>
+                            <th class="mdui-table-col-numeric">结果
+                                <select id="scores" class="mdui-select"></select>
+                            </th>
+                            <th class="mdui-table-col-numeric">时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-list"></tbody>
+                </table>
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" onclick="exportExcel('xlsx');">导出excel</button>
+                <button class="mdui-btn mdui-ripple" onclick="lookCharts()">查看柱状图</button>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-dialog" id="refresh-dialog">
+        <div class="mdui-dialog-content">确定要初始化？？</div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" onclick="initData()" mdui-dialog-confirm>确定</button>
+            <button class="mdui-btn mdui-ripple" mdui-dialog-cancel>取消</button>
+        </div>
+    </div>
+    <script>
+        var nowComp;
+
+        function exportExcel(type, fn, dl) {
+            event.preventDefault();
+            var title = $(nowComp).parent().prev().prev().text().trim();
+            var subtitle = $("#scores option:selected").text();
+            var elt = document.getElementById('result-table');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "Sheet JS" });
+            // var inst = new mdui.Dialog('#export-dialog');
+            // inst.close();
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || (title + '(' + subtitle + ').' + (type || 'xlsx')));
+        }
+
+        function lookCharts() {
+            window.open('/worldcup/charts/' + nowComp.id);
+        }
+
+        // function initData() {
+        //     $.ajax({
+        //         method: 'post',
+        //         url: '/initDataaaaaaaaaaaaaa',
+        //         success: function (data) {
+        //             window.location.reload();
+        //         }
+        //     });
+        // }
+
+        $("#scores").change(function () {
+            var chooseResult = $("#scores option:selected").text();
+            getUserList(1, chooseResult);
+        });
+
+        //竞猜列表
+        var inst = new mdui.Dialog('#list-dialog');
+        function openDialog(obj) {
+            nowComp = obj;
+            getUserList(0, "");
+        }
+
+        function getUserList(type, chooseResult) {
+            if (chooseResult == "全部") {
+                type = 0;
+            }
+            $.ajax({
+                method: 'post',
+                url: '/getUserList',
+                data: {
+                    cId: nowComp.id,
+                    type,
+                    chooseResult,
+                },
+                success: function (data) {
+                    var html = "";
+                    $("#tbody-list").html(html);
+                    if (type == 0) {
+                        var scoresSel = $("#scores");
+                        scoresSel.empty();
+                        if (data.scores.length == 0) {
+                            scoresSel.append("<option value='-1'>无比分</option>");
+                        } else {
+                            scoresSel.append("<option value='-1'>全部</option>");
+                        }
+                        var allData = [];
+                        var numData = [];
+                        var num = 0;
+                        for (var j = 0; j < data.scores.length; j++) {
+                            num = 0;
+                            scoresSel.append(`<option value='${j}'>${data.scores[j]}</option>`);
+                            for (var k = 0; k < data.comps.userList.length; k++) {
+                                if (data.comps.userList[k].chooseResult == data.scores[j]) {
+                                    num++;
+                                }
+                            }
+                            numData.push(num);
+                        }
+                        allData[0] = data.scores;
+                        allData[1] = numData;
+                        // console.table(allData);
+                        for (var i = data.comps.userList.length - 1; i >=0 ; i--) {
+                            var u = data.comps.userList[i].userId;
+                            html += `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${u.name}</td>
+                                <td class="mdui-table-col-numeric">${u.department}</td>
+                                <td class="mdui-table-col-numeric">${data.comps.userList[i].chooseResult}</td>
+                                <td class="mdui-table-col-numeric">${moment(data.comps.userList[i].chooseTime).format("YYYY-MM-DD HH:mm:ss")}</td>
+                            </tr>
+                            `;
+                        }
+                    } else if (type == 1) {
+                        for (var i = 0; i < data.newUserList.length; i++) {
+                            var u = data.newUserList[i].userId;
+                            html += `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${u.name}</td>
+                                <td class="mdui-table-col-numeric">${u.department}</td>
+                                <td class="mdui-table-col-numeric">${data.newUserList[i].chooseResult}</td>
+                                <td class="mdui-table-col-numeric">${moment(data.newUserList[i].chooseTime).format("YYYY-MM-DD HH:mm:ss")}</td>
+                            </tr>
+                            `;
+                        }
+                    }
+                    $("#tbody-list").html(html);
+                    inst.open();
+                }
+            });
+        }
+
+        //新增场次
+        function addComp() {
+            var teamOneName = $("#teamOneName").val();
+            var teamOneImg = $("#teamOneImg").val();
+            var teamTwoName = $("#teamTwoName").val();
+            var teamTwoImg = $("#teamTwoImg").val();
+            var beginTimeStr = $("#beginTime").val();
+            var beginTime = new Date("2018/" + beginTimeStr.replace("月", "/").replace("日", "/"));
+            if (teamOneName != "" && teamOneImg != "" && teamTwoName != "" && teamTwoImg != "" && beginTimeStr != "") {
+                $.ajax({
+                    method: 'post',
+                    url: "/addComp",
+                    data: {
+                        teamOneName,
+                        teamOneImg,
+                        teamTwoName,
+                        teamTwoImg,
+                        beginTime,
+                    },
+                    success: function (data) {
+                        // document.getElementById("tb").innerHTML += `
+                        //         <tr class="">
+                        //             <td>${data.de.name}</td>
+                        //             <td>${data.de.votes}</td>
+                        //         </tr>`
+                        //     ;
+                        // mdui.updateTables();
+                        window.location.reload();
+                    }
+                });
+            } else {
+                mdui.snackbar("请填写场次信息", 2000);
+            }
+        }
+
+    </script>
+</body>
+
+</html>

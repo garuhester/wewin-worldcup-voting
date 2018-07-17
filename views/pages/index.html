@@ -1,0 +1,40 @@
+<% include ../sharePages/header.html %>
+    <style>
+        .index {
+            width: 60%;
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+
+        .votingbtn {
+            background: linear-gradient(#F9C03F, #F8AC20);
+            font-size: 18px;
+            font-weight: bold;
+            color: #552E0B;
+            height: 45px;
+            border-radius: 7px;
+            border: none;
+            outline: none;
+        }
+
+        .votingbtn:active {
+            background: linear-gradient(rgb(248, 198, 81), rgb(248, 180, 53));
+        }
+    </style>
+    <div class="votingbg">
+        <img src="/img/bg.jpg" alt="">
+    </div>
+    <div class="votinglogo">
+        <img src="/img/wewinlogo2.png" alt="">
+    </div>
+    <div class="index mdui-container">
+        <div class="mdui-row">
+            <button class="votingbtn mdui-btn-block" onclick="window.location.href='/worldcup/voting'">参与竞猜</button>
+            <button class="votingbtn mdui-btn-block mdui-m-t-3" onclick="window.location.href='/worldcup/rule'">游戏规则</button>
+            <button class="votingbtn mdui-btn-block mdui-m-t-3" onclick="window.location.href='/worldcup/myvoting'">我的竞猜</button>
+        </div>
+    </div>      
+
+    <% include ../sharePages/footer.html %>
